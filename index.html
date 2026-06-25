@@ -1,0 +1,9213 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>LoanBase</title>
+
+
+
+<style>
+
+/* DISABLE SELECT + HIGHLIGHT EVERYWHERE */
+
+html,
+body,
+*{
+-webkit-user-select:none;
+-moz-user-select:none;
+-ms-user-select:none;
+user-select:none;
+
+-webkit-touch-callout:none;
+-webkit-tap-highlight-color:transparent;
+
+outline:none;
+}
+
+/* remove highlight color */
+::selection{
+background:transparent;
+color:inherit;
+}
+
+::-moz-selection{
+background:transparent;
+color:inherit;
+}
+
+/* prevent image drag */
+img{
+pointer-events:none;
+
+-webkit-user-drag:none;
+user-drag:none;
+}
+
+/* allow typing inside inputs */
+input,
+textarea{
+-webkit-user-select:text;
+user-select:text;
+
+pointer-events:auto;
+}
+
+/* remove focus glow */
+input:focus,
+textarea:focus,
+button:focus{
+outline:none;
+box-shadow:none;
+}
+
+/* prevent long press menus */
+a,
+button,
+div,
+span,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6{
+-webkit-touch-callout:none;
+}
+
+*{
+
+margin:0;
+
+padding:0;
+
+box-sizing:border-box;
+
+font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+
+}
+
+
+
+body{
+
+background:
+
+radial-gradient(circle at top,#0f2a1d,transparent 40%),
+
+radial-gradient(circle at bottom,#0a1410,transparent 40%),
+
+linear-gradient(180deg,#050705,#0b120e);
+
+color:white;
+
+min-height:100vh;
+
+}
+
+
+
+/* HEADER */
+
+header{
+
+padding:18px;
+
+}
+
+
+
+.logo{
+
+font-size:26px;
+
+font-weight:900;
+
+color:#4ade80;
+
+}
+
+
+
+/* GRID (STRICT 4 PER ROW) */
+
+.grid{
+
+display:grid;
+
+grid-template-columns:repeat(4, 1fr);
+
+gap:14px;
+
+padding:16px;
+
+}
+
+
+
+/* TABLETS (keep 4, same as desktop) */
+
+@media (max-width: 1024px){
+
+.grid{
+
+grid-template-columns:repeat(4, 1fr);
+
+gap:12px;
+
+}
+
+}
+
+
+
+/* PHONES (ALL ANDROID + IPHONE) → STRICT 2 PER ROW */
+
+@media (max-width: 768px){
+
+.grid{
+
+grid-template-columns:repeat(2, 1fr);
+
+gap:12px;
+
+}
+
+}
+
+
+
+/* SMALL PHONES → STILL 2 PER ROW */
+
+@media (max-width: 360px){
+
+.grid{
+
+grid-template-columns:repeat(2, 1fr);
+
+gap:10px;
+
+}
+
+}
+
+
+
+/* CARD */
+
+.card{
+
+position:relative;
+
+height:240px;
+
+border-radius:22px;
+
+overflow:hidden;
+
+cursor:pointer;
+
+border:1px solid rgba(255,255,255,.08);
+
+box-shadow:0 12px 30px rgba(0,0,0,.4);
+
+transition:.3s ease;
+
+}
+
+
+
+.card:hover{
+
+transform:translateY(-5px);
+
+}
+
+
+
+/* IMAGE */
+
+.card img{
+
+width:100%;
+
+height:100%;
+
+object-fit:cover;
+
+object-position:center;
+
+transform:scale(1.05);
+
+transition:.5s ease;
+
+filter:brightness(.88) contrast(1.15) saturate(1.1);
+
+}
+
+
+
+.card:hover img{
+
+transform:scale(1.15);
+
+filter:brightness(.98) contrast(1.25) saturate(1.2);
+
+}
+
+
+
+/* OVERLAY */
+
+.overlay{
+
+position:absolute;
+
+inset:0;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:flex-end;
+
+padding:16px;
+
+background:linear-gradient(
+
+to top,
+
+rgba(0,0,0,.92),
+
+rgba(0,0,0,.25),
+
+transparent
+
+);
+
+}
+
+
+
+/* TEXT */
+
+.title{
+
+font-size:16px;
+
+font-weight:900;
+
+}
+
+
+
+.meta{
+
+font-size:12px;
+
+opacity:.9;
+
+margin-top:4px;
+
+}
+
+
+
+/* BADGE */
+
+.badge{
+
+position:absolute;
+
+top:12px;
+
+left:12px;
+
+padding:6px 10px;
+
+background:rgba(0,0,0,.55);
+
+backdrop-filter:blur(8px);
+
+border:1px solid rgba(255,255,255,.12);
+
+border-radius:999px;
+
+font-size:11px;
+
+font-weight:700;
+
+}
+
+
+
+/* MODAL */
+
+/* MODAL */
+
+.modal{
+
+position:fixed;
+
+inset:0;
+
+
+
+display:none;
+
+
+
+background:rgba(0,0,0,.78);
+
+
+
+overflow:hidden;
+
+
+
+padding:18px;
+
+
+
+z-index:999;
+
+
+
+justify-content:center;
+
+
+
+align-items:center;
+
+}
+
+
+
+.box{
+
+background:#0e1511;
+
+
+
+border-radius:24px;
+
+
+
+padding:24px;
+
+
+
+border:1px solid rgba(255,255,255,.08);
+
+
+
+/* WIDER */
+
+width:min(92vw, 1100px);
+
+
+
+max-width:1100px;
+
+
+
+max-height:90vh;
+
+
+
+overflow-y:auto;
+
+
+
+scroll-behavior:smooth;
+
+
+
+box-shadow:
+
+0 20px 60px rgba(0,0,0,.55);
+
+
+
+margin:auto;
+
+}
+
+
+
+.box::-webkit-scrollbar{
+
+width:5px;
+
+}
+
+
+
+.box::-webkit-scrollbar-thumb{
+
+background:#22c55e;
+
+border-radius:999px;
+
+}
+
+
+
+.box::-webkit-scrollbar-track{
+
+background:transparent;
+
+}
+
+
+
+h2{
+
+color:#4ade80;
+
+margin-bottom:10px;
+
+}
+
+
+
+input{
+
+width:100%;
+
+padding:14px;
+
+margin-top:10px;
+
+border-radius:12px;
+
+border:none;
+
+outline:none;
+
+background:#172018;
+
+color:white;
+
+}
+
+
+
+/* BUTTONS */
+
+button{
+
+padding:14px;
+
+border:none;
+
+border-radius:14px;
+
+font-weight:800;
+
+cursor:pointer;
+
+transition:.25s;
+
+}
+
+
+
+.primary{
+
+background:#22c55e;
+
+color:white;
+
+}
+
+
+
+.cancel{
+
+background:#2a2a2a;
+
+color:white;
+
+}
+
+
+
+.btn-row{
+
+display:flex;
+
+gap:12px;
+
+margin-top:14px;
+
+}
+
+
+
+.btn-row button{
+
+flex:1;
+
+width:auto;
+
+margin-top:0;
+
+}
+
+
+
+button:hover{
+
+transform:translateY(-2px);
+
+}
+
+
+
+/* PAYMENT */
+
+.paybox{
+
+display:none;
+
+margin-top:15px;
+
+padding:14px;
+
+border-radius:14px;
+
+background:#0b1a12;
+
+border:1px solid #1f3b2a;
+
+}
+
+
+
+.summary{
+
+background:#121c15;
+
+padding:12px;
+
+border-radius:14px;
+
+margin-top:10px;
+
+font-size:13px;
+
+line-height:1.6;
+
+}
+
+
+
+.header{
+
+display:flex;
+
+flex-direction:column;
+
+
+
+align-items:center; /* center everything */
+
+
+
+justify-content:center;
+
+
+
+padding:18px;
+
+
+
+text-align:center;
+
+
+
+background:rgba(0,0,0,.35);
+
+
+
+backdrop-filter:blur(12px);
+
+
+
+border-bottom:1px solid rgba(255,255,255,.06);
+
+
+
+position:sticky;
+
+
+
+top:0;
+
+
+
+z-index:10;
+
+}
+
+
+
+.brand-row{
+
+display:flex;
+
+
+
+align-items:center;
+
+
+
+justify-content:center;
+
+
+
+gap:6px;
+
+}
+
+
+
+.brand-title{
+
+font-size:30px;
+
+
+
+font-weight:900;
+
+
+
+color:#4ade80;
+
+}
+
+
+
+.brand-subtitle-big{
+
+margin-top:8px;
+
+
+
+font-size:15px;
+
+
+
+max-width:700px;
+
+
+
+color:rgba(255,255,255,.88);
+
+
+
+text-align:center;
+
+}
+
+
+
+.header-info{
+
+margin-top:14px;
+
+
+
+display:flex;
+
+
+
+justify-content:center;
+
+
+
+align-items:center;
+
+
+
+flex-wrap:wrap;
+
+
+
+gap:10px;
+
+}
+
+
+
+.header-info span{
+
+padding:8px 12px;
+
+
+
+background:rgba(34,197,94,.10);
+
+
+
+border:1px solid rgba(34,197,94,.18);
+
+
+
+border-radius:999px;
+
+}
+
+
+
+/* LOGO */
+
+/* SMALL LOGO */
+
+.logo-mark{
+
+width:32px;
+
+height:32px;
+
+
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+
+
+background:linear-gradient(
+
+135deg,
+
+#0f2a1d,
+
+#13271a
+
+);
+
+
+
+border-radius:10px;
+
+
+
+border:1px solid rgba(34,197,94,.22);
+
+
+
+box-shadow:
+
+0 4px 10px rgba(34,197,94,.12);
+
+
+
+flex-shrink:0;
+
+}
+
+
+
+.logo-svg{
+
+width:18px;
+
+height:18px;
+
+
+
+display:block;
+
+}
+
+
+
+#loanAmount::placeholder{
+
+color:rgba(255,255,255,.45);
+
+font-size:14px;
+
+font-weight:500;
+
+}
+
+
+
+input:focus{
+
+border:1px solid #22c55e;
+
+box-shadow:0 0 0 4px rgba(34,197,94,.12);
+
+}
+
+
+
+input::-ms-reveal{
+
+display:none;
+
+}
+
+
+
+/* REMOVE BROWSER AUTOFILL COMPLETELY */
+
+input:-webkit-autofill,
+
+input:-webkit-autofill:hover,
+
+input:-webkit-autofill:focus,
+
+input:-webkit-autofill:active{
+
+-webkit-box-shadow:0 0 0 1000px #172018 inset !important;
+
+-webkit-text-fill-color:#fff !important;
+
+caret-color:#fff;
+
+transition:background-color 999999s;
+
+}
+
+
+
+/* disable browser helper styles */
+
+input{
+
+appearance:none;
+
+-webkit-appearance:none;
+
+}
+
+
+
+.moving-border-upload{
+
+position:relative;
+
+
+
+display:flex;
+
+flex-direction:column;
+
+
+
+align-items:center;
+
+justify-content:center;
+
+
+
+padding:28px;
+
+
+
+border-radius:20px;
+
+
+
+cursor:pointer;
+
+
+
+overflow:hidden;
+
+
+
+background:
+
+linear-gradient(
+
+180deg,
+
+rgba(34,197,94,.05),
+
+transparent
+
+);
+
+
+
+isolation:isolate;
+
+}
+
+
+
+/* moving dotted border */
+
+.moving-border-upload::before{
+
+
+
+content:"";
+
+
+
+position:absolute;
+
+
+
+inset:0;
+
+
+
+border-radius:20px;
+
+
+
+padding:2px;
+
+
+
+background:
+
+repeating-conic-gradient(
+
+from var(--angle),
+
+#22c55e 0deg 8deg,
+
+transparent 8deg 16deg
+
+);
+
+
+
+animation:
+
+borderRun 8s linear infinite;
+
+
+
+/* cut center */
+
+-webkit-mask:
+
+linear-gradient(#000 0 0)
+
+content-box,
+
+linear-gradient(#000 0 0);
+
+
+
+-webkit-mask-composite:xor;
+
+
+
+mask-composite:exclude;
+
+
+
+pointer-events:none;
+
+}
+
+
+
+@property --angle{
+
+syntax:"<angle>";
+
+inherits:false;
+
+initial-value:0deg;
+
+}
+
+
+
+@keyframes borderRun{
+
+
+
+from{
+
+--angle:0deg;
+
+}
+
+
+
+to{
+
+--angle:360deg;
+
+}
+
+
+
+}
+
+
+
+@keyframes tapPulse{
+
+
+
+0%{
+
+transform:scale(1);
+
+}
+
+
+
+50%{
+
+transform:scale(.92);
+
+}
+
+
+
+100%{
+
+transform:scale(1);
+
+}
+
+
+
+}
+
+
+
+@keyframes posFloat{
+
+
+
+0%{
+
+transform:translateY(0);
+
+}
+
+
+
+50%{
+
+transform:translateY(-4px);
+
+}
+
+
+
+100%{
+
+transform:translateY(0);
+
+}
+
+
+
+}
+
+</style>
+
+
+
+</head>
+
+
+
+<body>
+
+
+
+<header class="header">
+
+
+
+    <div class="brand-row">
+
+
+
+        <div class="logo-mark">
+
+
+
+            <svg viewBox="0 0 24 24" class="logo-svg">
+
+                <path d="M12 2L20 6v6c0 5-3.5 9.5-8 10-4.5-.5-8-5-8-10V6l8-4z" fill="url(#g)" />
+
+                <path d="M9 12l2 2 4-5" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" />
+
+
+
+                <defs>
+
+                    <linearGradient id="g">
+
+                        <stop offset="0%" stop-color="#22c55e" />
+
+                        <stop offset="100%" stop-color="#16a34a" />
+
+                    </linearGradient>
+
+                </defs>
+
+
+
+            </svg>
+
+
+
+        </div>
+
+
+
+        <div class="brand-title">
+
+            LoanBase
+
+        </div>
+
+
+
+    </div>
+
+
+
+    <div class="brand-subtitle-big">
+
+        Fast, secure & trusted digital lending platform across World!
+
+    </div>
+
+
+
+    <div class="header-info">
+
+        <span>⚡ Instant Approval</span>
+
+        <span>🔒 Bank-Level Security</span>
+
+        <span>📈 Low Interest Rates</span>
+
+    </div>
+
+
+
+</header>
+
+
+
+<div class="grid" id="grid"></div>
+
+
+
+<!-- MODAL -->
+
+<!-- MULTI STEP MODAL -->
+
+<div class="modal" id="modal">
+
+
+
+<div class="box">
+
+
+
+<div id="screen"></div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+<script type="module">
+
+
+
+    import {
+
+        initializeApp
+
+    }
+
+
+
+        from
+
+        "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+
+
+    import {
+            initializeFirestore,
+            collection,
+            addDoc,
+            onSnapshot,
+            doc,
+            updateDoc,
+            deleteDoc
+        }
+
+            from
+
+            "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+
+
+const loans = [
+
+["Business Loan",50000,5000000,8,5000,"#22c55e","","officeMeeting.webp"],
+
+["School Fee",30000,800000,4,2000,"#3b82f6","","studentStudyingBook.webp"],
+
+["Medical Bills",20000,700000,3,1500,"#ef4444","","nurseInhospitalWard.webp"],
+
+["Rent",50000,1500000,5,3000,"#8b5cf6","","building.webp"],
+
+["Travel",30000,500000,4,2500,"#f59e0b","","airport.webp"],
+
+["Wedding/Event",50000,800000,7,3500,"#ec4899","","wedding.webp"],
+
+["Household Expenses",20000,300000,3,1000,"#06b6d4","","foodItemsShelves.webp"],
+
+["Home Improvement",100000,3000000,9,4500,"#84cc16","","toolsHammerDrill.webp"],
+
+["Agriculture/Farming",70000,4000000,6,3500,"#10b981","","farmerInfield.webp"],
+
+["Transportation",50000,1000000,5,2500,"#f97316","","highwayTraffic.webp"],
+
+["Personal Use",10000,500000,4,2000,"#64748b","","casualLifestyle.webp"],
+
+["Other",10000,1000000,5,3000,"#334155","⋯","genericConcept.webp"]
+
+];
+
+
+
+    let selectedLoan = null;
+
+
+
+    const modal =
+
+        document.getElementById("modal");
+
+
+
+    const screen =
+
+        document.getElementById("screen");
+
+
+
+    function render() {
+
+
+
+        const grid =
+
+            document.getElementById("grid");
+
+
+
+        grid.innerHTML = "";
+
+
+
+        loans.forEach(l => {
+
+
+
+            const card =
+
+                document.createElement("div");
+
+
+
+            card.className =
+
+                "card";
+
+
+
+            card.innerHTML = `
+
+
+
+<img src="${l[7]}" alt="">
+
+
+
+<div class="overlay">
+
+
+
+<div class="title">
+
+${l[0]}
+
+</div>
+
+
+
+<div class="meta">
+
+
+
+₦${l[1].toLocaleString()}
+
+—
+
+₦${l[2].toLocaleString()}
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+<div class="badge">
+
+
+
+${l[3]}%
+
+
+
+</div>
+
+
+
+`;
+
+
+
+            card.addEventListener(
+
+                "click",
+
+                () => {
+
+
+
+                    openForm(l);
+
+
+
+                }
+
+            );
+
+
+
+            grid.appendChild(card);
+
+
+
+        });
+
+
+
+    }
+
+
+
+    let formData = {};
+
+    let selectedAmount = 0;
+
+
+
+    function openForm(l) {
+
+
+
+        selectedLoan = l;
+
+
+
+        modal.style.display = "flex";
+
+
+
+        showDashboard();
+
+
+
+    }
+
+
+
+    function closeModal() {
+
+
+
+        modal.style.display = "none";
+
+
+
+        screen.innerHTML = "";
+
+
+
+    }
+
+
+
+    function showDashboard() {
+
+
+
+        screen.innerHTML = `
+
+
+
+<div style="
+
+padding:22px;
+
+border-radius:24px;
+
+background:
+
+linear-gradient(
+
+135deg,
+
+rgba(34,197,94,.18),
+
+rgba(10,20,16,.95)
+
+);
+
+margin-bottom:20px;
+
+">
+
+
+
+<div style="
+
+font-size:32px;
+
+font-weight:900;
+
+color:white;
+
+">
+
+Loan Dashboard
+
+</div>
+
+
+
+<div style="
+
+margin-top:6px;
+
+font-size:14px;
+
+color:rgba(255,255,255,.75);
+
+">
+
+Review your selected loan, check repayment estimates and continue.
+
+</div>
+
+
+
+</div>
+
+
+
+<div style="
+
+background:#101814;
+
+
+
+padding:22px;
+
+
+
+border-radius:22px;
+
+">
+
+
+
+<div style="
+
+display:flex;
+
+
+
+justify-content:space-between;
+
+">
+
+
+
+<div>
+
+
+
+<div style="
+
+font-size:13px;
+
+
+
+opacity:.6;
+
+">
+
+Loan Type
+
+
+
+</div>
+
+
+
+<div style="
+
+font-size:26px;
+
+
+
+font-weight:900;
+
+">
+
+${selectedLoan[0]}
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+<div style="
+
+color:#4ade80;
+
+
+
+font-weight:900;
+
+">
+
+LoanBase
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+<div style="
+
+margin-top:20px;
+
+
+
+padding:18px;
+
+
+
+background:#131f18;
+
+
+
+border-radius:18px;
+
+">
+
+
+
+<div style="
+
+font-size:13px;
+
+
+
+opacity:.6;
+
+">
+
+Loan Amount
+
+
+
+</div>
+
+
+
+<div
+
+id="amountView"
+
+
+
+style="
+
+font-size:42px;
+
+
+
+font-weight:900;
+
+
+
+margin-top:10px;
+
+">
+
+₦0
+
+
+
+</div>
+
+
+
+<div style="
+
+margin-top:8px;
+
+">
+
+Interest
+
+
+
+<b
+
+id="interestView"
+
+style="
+
+color:#4ade80;
+
+">
+
+0% </b>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+<div style="
+
+margin-top:20px;
+
+">
+
+
+
+<div style="
+
+margin-bottom:8px;
+
+
+
+font-size:13px;
+
+
+
+opacity:.6;
+
+">
+
+Select Amount
+
+
+
+</div>
+
+
+
+<div style="
+
+color:#4ade80;
+
+
+
+font-size:13px;
+
+
+
+font-weight:900;
+
+
+
+margin-bottom:12px;
+
+">
+
+
+
+Min:
+
+₦${selectedLoan[1].toLocaleString()}
+
+
+
+•
+
+
+
+Max:
+
+₦${selectedLoan[2].toLocaleString()}
+
+
+
+</div>
+
+
+
+<input
+id="loanAmount"
+type="number"
+min="${selectedLoan[1]}"
+max="${selectedLoan[2]}"
+placeholder="Enter Loan Amount"
+oninput="updateLoanValues()"
+
+style="
+width:100%;
+height:72px;
+
+margin-top:18px;
+
+padding:0 22px;
+
+background:
+linear-gradient(
+145deg,
+rgba(34,197,94,.12),
+rgba(14,20,16,.98)
+);
+
+border:
+2px solid rgba(34,197,94,.45);
+
+border-radius:18px;
+
+font-size:24px;
+
+font-weight:900;
+
+color:#4ade80;
+
+outline:none;
+
+box-shadow:
+0 0 0 2px rgba(34,197,94,.06),
+0 14px 30px rgba(34,197,94,.18);
+
+text-align:left;
+"
+>
+
+
+
+<div
+
+id="limitText"
+
+
+
+style="
+
+margin-top:8px;
+
+
+
+font-size:13px;
+
+
+
+color:#7b8a80;
+
+">
+
+
+
+Enter amount to continue
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+<div style="
+
+margin-top:20px;
+
+">
+
+
+
+<div style="
+
+font-size:16px;
+
+
+
+font-weight:900;
+
+
+
+margin-bottom:12px;
+
+">
+
+
+
+Repayment Plans
+
+
+
+</div>
+
+
+
+<div style="
+
+display:grid;
+
+
+
+grid-template-columns:1fr 1fr;
+
+
+
+gap:12px;
+
+">
+
+
+
+<div class="summary">
+
+1 Week
+
+<br>
+
+<b id="weekPay">₦0</b>
+
+</div>
+
+
+
+<div class="summary">
+
+1 Month
+
+<br>
+
+<b id="monthPay">₦0</b>
+
+</div>
+
+
+
+<div class="summary">
+
+2 Months
+
+<br>
+
+<b id="twoMonthPay">₦0</b>
+
+</div>
+
+
+
+<div class="summary">
+
+1 Year
+
+<br>
+
+<b id="yearPay">₦0</b>
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+<div style="
+
+margin-top:20px;
+
+
+
+display:grid;
+
+
+
+gap:12px;
+
+">
+
+
+
+<div style="
+
+background:#102015;
+
+
+
+padding:18px;
+
+
+
+border-radius:18px;
+
+">
+
+
+
+<div style="
+
+opacity:.6;
+
+">
+
+Total Repayment
+
+</div>
+
+
+
+<div
+
+id="repaymentView"
+
+
+
+style="
+
+font-size:34px;
+
+
+
+font-weight:900;
+
+
+
+color:#4ade80;
+
+">
+
+
+
+₦0
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+<div style="
+
+background:#171717;
+
+
+
+padding:18px;
+
+
+
+border-radius:18px;
+
+">
+
+
+
+<div style="
+
+opacity:.6;
+
+">
+
+Submission Fee
+
+</div>
+
+
+
+<div style="
+
+font-size:32px;
+
+
+
+font-weight:900;
+
+">
+
+
+
+₦${selectedLoan[4].toLocaleString()}
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+<div
+
+id="continueWarning"
+
+
+
+style="
+
+display:none;
+
+
+
+margin-top:16px;
+
+
+
+padding:12px;
+
+
+
+border-radius:12px;
+
+
+
+background:
+
+rgba(239,68,68,.12);
+
+
+
+color:#ff9b9b;
+
+
+
+font-weight:700;
+
+
+
+text-align:center;
+
+">
+
+
+
+</div>
+
+
+
+<div class="btn-row">
+
+
+
+<button
+
+class="cancel"
+
+
+
+onclick="closeModal()">
+
+
+
+Cancel
+
+
+
+</button>
+
+
+
+<button
+
+id="continueBtn"
+
+
+
+class="primary"
+
+
+
+onclick="validateAndContinue()">
+
+
+
+Continue
+
+
+
+</button>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+`;
+
+
+
+        setTimeout(() => {
+
+
+
+            const input =
+
+                document.getElementById(
+
+                    "loanAmount"
+
+                );
+
+
+
+            if (input) {
+
+
+
+                input.addEventListener(
+
+                    "input",
+
+                    updateLoanValues
+
+                );
+
+
+
+                input.addEventListener(
+
+                    "keyup",
+
+                    updateLoanValues
+
+                );
+
+
+
+                input.addEventListener(
+
+                    "change",
+
+                    updateLoanValues
+
+                );
+
+
+
+            }
+
+
+
+            updateLoanValues();
+
+
+
+        }, 50);
+
+
+
+    }
+
+
+
+    function updateLoanValues() {
+
+            const input = document.getElementById("loanAmount");
+            if (!input) return;
+
+            let amount = Number(input.value) || 0;
+
+            const min = selectedLoan[1];
+            const max = selectedLoan[2];
+
+            const limit =
+                document.getElementById("limitText");
+
+            const continueBtn =
+                document.getElementById("continueBtn");
+
+            if (amount <= 0) {
+                selectedAmount = 0;
+
+                limit.innerHTML =
+                    "Enter amount to continue";
+
+                limit.style.color =
+                    "#7b8a80";
+
+                resetValues();
+                return;
+            }
+
+            /* BLOCK ABOVE MAX ONLY */
+            if (amount > max) {
+
+                limit.innerHTML =
+                    "⚠ You Have Hit Your Loan Request, Enter Max Amount Instead";
+
+                limit.style.color =
+                    "#ef4444";
+
+                amount = max;
+
+            }
+
+            /* BELOW MINIMUM */
+            else if (amount < min) {
+
+                limit.innerHTML =
+                    `Amount Entering... Minimum ₦${min.toLocaleString()}`;
+
+                limit.style.color =
+                    "#f59e0b";
+
+                continueBtn.disabled = true;
+
+                resetValues();
+
+                return;
+
+            }
+
+            /* ACCEPTED ONLY WHEN VALID */
+            else {
+
+                limit.innerHTML =
+                    `✓ Amount Accepted`;
+
+                limit.style.color =
+                    "#22c55e";
+
+                continueBtn.disabled = false;
+
+            }
+
+            continueBtn.disabled = false;
+
+            /* INTEREST SCALE */
+
+            let interest;
+
+            if (amount <= 50000)
+                interest = 8;
+
+            else if (amount <= 200000)
+                interest = 12;
+
+            else if (amount <= 500000)
+                interest = 16;
+
+            else
+                interest = 22;
+
+                document.getElementById(
+            "amountView"
+        ).innerHTML =
+            "₦" +
+            amount.toLocaleString();
+
+        document.getElementById(
+            "interestView"
+        ).innerHTML =
+            interest + "%";
+
+            /* TOTAL REPAYMENT */
+
+const interestAmount =
+Math.round(
+amount *
+(interest / 100)
+);
+
+const total =
+amount +
+interestAmount;
+
+/* PROPER REPAYMENT */
+
+const week =
+Math.ceil(total / 1);
+
+const month =
+Math.ceil(total * 1.35);
+
+const twoMonth =
+Math.ceil(total * 1.65);
+
+const year =
+Math.ceil(total * 3.8);
+
+/* DISPLAY */
+
+document.getElementById(
+"repaymentView"
+).innerHTML =
+"₦" +
+week.toLocaleString();
+
+document.getElementById(
+"weekPay"
+).innerHTML =
+"₦" +
+week.toLocaleString();
+
+document.getElementById(
+"monthPay"
+).innerHTML =
+"₦" +
+month.toLocaleString();
+
+document.getElementById(
+"twoMonthPay"
+).innerHTML =
+"₦" +
+twoMonth.toLocaleString();
+
+document.getElementById(
+"yearPay"
+).innerHTML =
+"₦" +
+year.toLocaleString();
+
+            /* SUBMISSION FEE UPDATE */
+
+            /* SUBMISSION FEE UPDATE */
+
+        let fee = 2500;
+
+        if (amount <= 50000)
+            fee = 500;
+
+        else if (amount <= 200000)
+            fee = 1000;
+
+        else if (amount <= 500000)
+            fee = 1500;
+
+        else
+            fee = 2500;
+
+        selectedLoan[4] = fee;
+
+        const feeBox =
+            document.getElementById("submitFee");
+
+        if (feeBox) {
+            feeBox.innerHTML =
+                "₦" +
+                fee.toLocaleString();
+        }
+
+            selectedAmount = amount;
+
+            selectedLoan.currentInterest =
+                interest;
+
+        }
+
+            function resetValues() {
+
+                    document.getElementById(
+
+                        "amountView"
+
+                    ).innerHTML = "₦0";
+
+
+
+                    document.getElementById(
+
+                        "interestView"
+
+                    ).innerHTML = "0%";
+
+
+
+                    document.getElementById(
+
+                        "repaymentView"
+
+                    ).innerHTML = "₦0";
+
+
+
+                    document.getElementById(
+
+                        "weekPay"
+
+                    ).innerHTML = "₦0";
+
+
+
+                    document.getElementById(
+
+                        "monthPay"
+
+                    ).innerHTML = "₦0";
+
+
+
+                    document.getElementById(
+
+                        "twoMonthPay"
+
+                    ).innerHTML = "₦0";
+
+
+
+                    document.getElementById(
+
+                        "yearPay"
+
+                    ).innerHTML = "₦0";
+
+                }
+
+            setTimeout(
+
+                    updateLoanValues,
+
+                    50
+
+                );
+
+
+
+                selectedAmount =
+
+                        Number(
+
+                            document.getElementById(
+
+                                "loanAmount"
+
+                            )?.value
+
+                        ) || selectedAmount;
+
+
+
+    function showForm() {
+
+
+
+            if (
+
+            document.getElementById("loanAmount")
+
+        ) {
+
+            selectedAmount =
+
+                Number(
+
+                    document.getElementById("loanAmount").value
+
+                );
+
+        }
+
+
+
+            screen.innerHTML = `
+
+
+
+<div style="
+
+position:relative;
+
+
+
+padding:22px;
+
+
+
+margin-bottom:18px;
+
+
+
+border-radius:24px;
+
+
+
+overflow:hidden;
+
+
+
+background:
+
+linear-gradient(
+
+135deg,
+
+rgba(34,197,94,.14),
+
+rgba(8,14,11,.98)
+
+);
+
+
+
+border:
+
+1px solid rgba(34,197,94,.12);
+
+
+
+box-shadow:
+
+0 18px 40px rgba(0,0,0,.28);
+
+">
+
+
+
+<!-- glow -->
+
+<div style="
+
+position:absolute;
+
+
+
+right:-70px;
+
+top:-70px;
+
+
+
+width:180px;
+
+height:180px;
+
+
+
+border-radius:50%;
+
+
+
+background:
+
+radial-gradient(
+
+circle,
+
+rgba(74,222,128,.12),
+
+transparent 70%
+
+);
+
+">
+
+</div>
+
+
+
+<div style="
+
+display:flex;
+
+
+
+align-items:center;
+
+
+
+gap:16px;
+
+
+
+position:relative;
+
+
+
+z-index:2;
+
+">
+
+
+
+<!-- icon -->
+
+<div style="
+
+width:72px;
+
+height:72px;
+
+
+
+border-radius:22px;
+
+
+
+display:flex;
+
+
+
+align-items:center;
+
+
+
+justify-content:center;
+
+
+
+background:
+
+linear-gradient(
+
+180deg,
+
+rgba(34,197,94,.08),
+
+rgba(255,255,255,.02)
+
+);
+
+
+
+border:
+
+1px solid rgba(255,255,255,.06);
+
+
+
+flex-shrink:0;
+
+">
+
+
+
+<svg
+
+width="34"
+
+height="34"
+
+viewBox="0 0 24 24">
+
+
+
+<path
+
+d="M12 2L20 6v6c0 5-3.5 9.5-8 10-4.5-.5-8-5-8-10V6l8-4z"
+
+fill="#22c55e"/>
+
+
+
+<path
+
+d="M9 12l2 2 4-5"
+
+stroke="white"
+
+stroke-width="1.8"
+
+fill="none"
+
+stroke-linecap="round"/>
+
+
+
+</svg>
+
+
+
+</div>
+
+
+
+<!-- text -->
+
+<div>
+
+
+
+<div style="
+
+font-size:30px;
+
+
+
+font-weight:900;
+
+
+
+letter-spacing:-.6px;
+
+
+
+color:white;
+
+">
+
+
+
+Application Form
+
+
+
+</div>
+
+
+
+<div style="
+
+margin-top:4px;
+
+
+
+font-size:17px;
+
+
+
+font-weight:700;
+
+
+
+color:#8ef0b3;
+
+">
+
+
+
+Complete Your Application Below.
+
+
+
+</div>
+
+
+
+<div style="
+
+margin-top:10px;
+
+
+
+font-size:14px;
+
+
+
+line-height:1.8;
+
+
+
+max-width:620px;
+
+
+
+color:rgba(255,255,255,.72);
+
+">
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+<form autocomplete="off">
+
+<input
+
+id="name"
+
+autocomplete="off"
+
+placeholder="Full Name"
+
+value="${formData.name || ""}">
+
+<input
+
+id="phone"
+
+autocomplete="off"
+
+placeholder="Phone Number"
+
+value="${formData.phone || ""}">
+
+
+
+<input
+
+id="nok"
+
+autocomplete="off"
+
+placeholder="Next Of Kin"
+
+value="${formData.nok || ""}">
+
+
+
+<input
+
+id="bank"
+
+autocomplete="off"
+
+placeholder="Bank Name"
+
+value="${formData.bank || ""}">
+
+
+
+<!-- hidden trap -->
+
+<input
+
+type="text"
+
+style="display:none">
+
+
+
+<input
+
+id="accName"
+
+type="text"
+
+placeholder="Account Name"
+
+autocomplete="off"
+
+name="no-fill-name">
+
+
+
+<input
+
+id="accNum"
+
+type="text"
+
+inputmode="numeric"
+
+placeholder="Account Number"
+
+autocomplete="off"
+
+name="no-fill-number">
+
+
+
+</form>
+
+
+
+
+
+<div class="summary">
+
+
+
+<div style="
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+">
+
+
+
+<span>
+
+Loan Type
+
+</span>
+
+
+
+<b>
+
+
+
+${selectedLoan[0]}
+
+
+
+</b>
+
+
+
+</div>
+
+
+
+<hr style="
+
+margin:12px 0;
+
+border-color:rgba(255,255,255,.08);
+
+">
+
+
+
+<div style="
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+">
+
+
+
+<span>
+
+Interest
+
+</span>
+
+
+
+<b style="
+
+color:#4ade80;
+
+">
+
+
+
+${selectedLoan.currentInterest || selectedLoan[3]}%
+
+
+
+</b>
+
+
+
+</div>
+
+
+
+<hr style="
+
+margin:12px 0;
+
+border-color:rgba(255,255,255,.08);
+
+">
+
+
+
+<div style="
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+">
+
+
+
+<span>
+
+Selected Amount
+
+</span>
+
+
+
+<b>
+
+
+
+₦${Number(window.selectedAmount || selectedAmount || selectedLoan[1]).toLocaleString()}
+
+
+
+</b>
+
+
+
+</div>
+
+
+
+<hr style="
+
+margin:12px 0;
+
+border-color:rgba(255,255,255,.08);
+
+">
+
+
+
+<div style="
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+">
+
+
+
+<span>
+
+Repayment
+
+</span>
+
+
+
+<b style="
+
+color:#4ade80;
+
+">
+
+
+
+₦${(
+
+                    Number(window.selectedAmount || selectedAmount) +
+                (
+                    Number(window.selectedAmount || selectedAmount) *
+                    (
+                        selectedLoan.currentInterest ||
+                        selectedLoan[3]
+                    )
+                    / 100
+                )
+
+                ).toLocaleString()}
+
+
+
+</b>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+<div class="btn-row">
+
+
+
+<button
+
+class="cancel"
+
+onclick="showDashboard()">
+
+
+
+Back
+
+
+
+</button>
+
+
+
+<button
+
+class="primary"
+
+onclick="submitForm()">
+
+
+
+Continue
+
+
+
+</button>
+
+
+
+</div>
+
+
+
+`;
+
+
+
+        }
+
+
+
+    function submitForm() {
+
+
+
+            const fullName = document.getElementById("name");
+
+            const phoneInput = document.getElementById("phone");
+
+            const nokInput = document.getElementById("nok");
+
+            const bankInput = document.getElementById("bank");
+
+            const accNameInput = document.getElementById("accName");
+
+            const accNumInput = document.getElementById("accNum");
+
+
+
+            const fields = [
+
+            fullName,
+
+            phoneInput,
+
+            nokInput,
+
+            bankInput,
+
+            accNameInput,
+
+            accNumInput
+
+        ];
+
+
+
+        // remove old errors
+
+        document.querySelectorAll(".field-error")
+
+            .forEach(e => e.remove());
+
+
+
+        let hasError = false;
+
+
+
+        fields.forEach(field => {
+
+
+
+            field.style.border = "none";
+
+
+
+            field.oninput = function () {
+
+
+
+                if (field.value.trim()) {
+
+
+
+                    field.style.border = "none";
+
+
+
+                    const next =
+
+                        field.nextElementSibling;
+
+
+
+                    if (
+
+                        next &&
+
+                        next.classList.contains(
+
+                            "field-error"
+
+                        )
+
+                    ) {
+
+                        next.remove();
+
+                    }
+
+
+
+                }
+
+
+
+            };
+
+
+
+            if (!field.value.trim()) {
+
+
+
+                hasError = true;
+
+
+
+                field.style.border =
+
+                    "1px solid #ef4444";
+
+
+
+                const msg =
+
+                    document.createElement("div");
+
+
+
+                msg.className =
+
+                    "field-error";
+
+
+
+                msg.innerHTML =
+
+                    "This field is required";
+
+
+
+                msg.style = `
+
+                margin-top:6px;
+
+                font-size:12px;
+
+                color:#ff7b7b;
+
+                font-weight:700;
+
+                `;
+
+
+
+                field.insertAdjacentElement(
+
+                    "afterend",
+
+                    msg
+
+                );
+
+
+
+            }
+
+
+
+        });
+
+
+
+        if (hasError) return;
+
+
+
+            function showInputMessage(msg) {
+
+
+
+            let old =
+
+                document.getElementById("inputMsg");
+
+
+
+            if (old) old.remove();
+
+
+
+            const m =
+
+                document.createElement("div");
+
+
+
+            m.id = "inputMsg";
+
+
+
+            m.innerHTML = msg;
+
+
+
+            m.style =
+
+                `
+
+margin-top:12px;
+
+padding:12px;
+
+border-radius:14px;
+
+background:rgba(239,68,68,.12);
+
+border:1px solid rgba(239,68,68,.25);
+
+color:#ff9d9d;
+
+font-size:13px;
+
+font-weight:700;
+
+text-align:center;
+
+`;
+
+
+
+            screen.prepend(m);
+
+
+
+            setTimeout(() => {
+
+                m.remove();
+
+            }, 2500);
+
+
+
+        }
+
+
+            window.formData = {
+
+
+
+            selectedAmount: selectedAmount,
+
+
+
+            loanType: selectedLoan[0],
+
+
+
+            amount: selectedAmount,
+
+
+
+            interest:
+
+                selectedLoan.currentInterest ||
+
+                selectedLoan[3],
+
+
+
+            repayment:
+
+                Math.round(
+
+                    selectedAmount +
+
+                    (
+
+                        selectedAmount *
+
+                        (
+
+                            selectedLoan.currentInterest ||
+
+                            selectedLoan[3]
+
+                        ) / 100
+
+                    )
+
+                ),
+
+
+
+            name: fullName.value.trim(),
+
+
+
+            phone: phoneInput.value.trim(),
+
+
+
+            nok: nokInput.value.trim(),
+
+
+
+            bank: bankInput.value.trim(),
+
+
+
+            accName: accNameInput.value.trim(),
+
+
+
+            accNum: accNumInput.value.trim()
+
+
+
+        };
+
+
+
+            showProceedNotice();
+
+
+
+        }
+
+
+
+        function returnToForm(e) {
+
+
+
+                if (e) {
+
+                    e.preventDefault();
+
+                    e.stopPropagation();
+
+                }
+
+
+
+                screen.innerHTML = "";
+
+
+
+                requestAnimationFrame(() => {
+
+                    showForm();
+
+                });
+
+
+
+                return false;
+
+
+
+            }
+
+
+
+       window.validateAndContinue = function () {
+
+
+
+            const amount =
+
+                Number(
+
+                    document.getElementById(
+
+                        "loanAmount"
+
+                    ).value
+
+                );
+
+
+
+            const warning =
+
+                document.getElementById(
+
+                    "continueWarning"
+
+                );
+
+
+
+            warning.style.display =
+
+                "none";
+
+
+
+            if (!amount) {
+
+
+
+                warning.style.display =
+
+                    "block";
+
+
+
+                warning.innerHTML =
+
+                    "Enter Loan Amount To Proceed";
+
+
+
+                return;
+
+
+
+            }
+
+
+
+            if (amount < selectedLoan[1]) {
+
+               warning.style.display = "block";
+
+               warning.style.background =
+                   "rgba(245,158,11,.12)";
+
+               warning.style.border =
+                   "1px solid rgba(245,158,11,.30)";
+
+               warning.style.color =
+                   "#f59e0b";
+
+               warning.innerHTML =
+                   `⚠ Minimum Loan Is ₦${selectedLoan[1].toLocaleString()}`;
+
+               return;
+           }
+
+           if (amount > selectedLoan[2]) {
+
+               warning.style.display = "block";
+
+               warning.style.background =
+                   "rgba(245,158,11,.12)";
+
+               warning.style.border =
+                   "1px solid rgba(245,158,11,.30)";
+
+               warning.style.color =
+                   "#f59e0b";
+
+               warning.innerHTML =
+                   `⚠ Maximum Loan Is ₦${selectedLoan[2].toLocaleString()}`;
+
+               return;
+           }
+
+           /* show amount entering first */
+           warning.style.display = "block";
+
+           warning.style.background =
+               "rgba(59,130,246,.10)";
+
+           warning.style.border =
+               "1px solid rgba(59,130,246,.25)";
+
+           warning.style.color =
+               "#60a5fa";
+
+           warning.innerHTML =
+               `Typing Amount... ₦${amount.toLocaleString()}`;
+
+
+           /* only show accepted when truly valid */
+           if (
+               amount >= selectedLoan[1] &&
+               amount <= selectedLoan[2]
+           ) {
+
+               setTimeout(() => {
+
+                   warning.style.background =
+                       "rgba(34,197,94,.12)";
+
+                   warning.style.border =
+                       "1px solid rgba(34,197,94,.30)";
+
+                   warning.style.color =
+                       "#22c55e";
+
+                   warning.innerHTML =
+                       `✓ Amount Accepted ₦${amount.toLocaleString()}`;
+
+                   setTimeout(() => {
+
+                       selectedAmount =
+                           Number(amount);
+
+                       window.selectedAmount =
+                           selectedAmount;
+
+                       selectedLoan.currentInterest =
+                           selectedLoan[3];
+
+                       showForm();
+
+                   }, 700);
+
+               }, 500);
+
+           }
+
+           return;
+
+
+
+            if (
+
+                amount > selectedLoan[2]
+
+            ) {
+
+
+
+                warning.style.display =
+
+                    "block";
+
+
+
+                warning.innerHTML =
+
+                    `⚠ Go Back And Enter Your Maximum Request ₦${selectedLoan[2].toLocaleString()}`;
+
+
+
+                return;
+
+}
+
+    selectedAmount = Number(amount);
+
+      // keep selected amount globally
+      window.selectedAmount = selectedAmount;
+
+      // also keep current interest
+      selectedLoan.currentInterest = selectedLoan[3];
+
+      showForm();
+}
+
+
+
+        function showProceedNotice() {
+
+
+
+                screen.innerHTML = `
+
+
+
+<div style="
+
+position:relative;
+
+padding:22px;
+
+border-radius:24px;
+
+overflow:hidden;
+
+
+
+background:
+
+linear-gradient(
+
+135deg,
+
+rgba(34,197,94,.18),
+
+rgba(10,20,16,.95)
+
+);
+
+
+
+border:
+
+1px solid rgba(34,197,94,.18);
+
+
+
+box-shadow:
+
+0 18px 50px rgba(0,0,0,.35);
+
+
+
+margin-bottom:20px;
+
+">
+
+
+
+<div style="
+
+position:absolute;
+
+top:-50px;
+
+right:-50px;
+
+
+
+width:160px;
+
+height:160px;
+
+
+
+border-radius:50%;
+
+
+
+background:
+
+radial-gradient(
+
+circle,
+
+rgba(74,222,128,.18),
+
+transparent 70%
+
+);
+
+"></div>
+
+
+
+<div style="
+
+display:flex;
+
+align-items:center;
+
+gap:14px;
+
+position:relative;
+
+z-index:2;
+
+">
+
+
+
+<div style="
+
+width:64px;
+
+height:64px;
+
+
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+
+
+background:
+
+linear-gradient(
+
+135deg,
+
+rgba(34,197,94,.08),
+
+rgba(10,20,16,.45)
+
+);
+
+
+
+border-radius:18px;
+
+
+
+border:1px solid rgba(34,197,94,.18);
+
+">
+
+
+
+💳
+
+
+
+</div>
+
+
+
+<div>
+
+
+
+<div style="
+
+font-size:32px;
+
+font-weight:900;
+
+color:white;
+
+">
+
+
+
+Applicant Fee
+
+
+
+</div>
+
+
+
+<div style="
+
+margin-top:6px;
+
+font-size:14px;
+
+line-height:1.6;
+
+color:rgba(255,255,255,.78);
+
+">
+
+
+
+Review payment information and continue your application.
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div style="
+
+background:
+
+linear-gradient(
+180deg,
+#101b14,
+#0c120f
+);
+
+border:
+1px solid rgba(74,222,128,.12);
+
+border-radius:22px;
+
+padding:24px;
+
+color:#d1fae5;
+
+box-shadow:
+inset 0 1px 0 rgba(255,255,255,.03);
+
+">
+
+<div style="
+
+font-size:13px;
+
+opacity:.7;
+
+">
+
+Processing Fee
+
+</div>
+
+<div style="
+font-size:46px;
+font-weight:900;
+color:#4ade80;
+margin-top:8px;
+">
+
+<span id="submitFee">
+
+₦${selectedLoan[4].toLocaleString()}
+
+</span>
+
+</div>
+
+
+
+<div style="
+
+max-width:560px;
+
+margin:auto;
+
+text-align:center;
+
+
+
+font-size:15px;
+
+font-weight:600;
+
+
+
+color:rgba(255,255,255,.90);
+
+
+
+line-height:1.8;
+
+">
+
+
+
+This one-time submission fee will be confirmed by the
+
+
+
+<span style="
+
+color:#4ade80;
+
+font-weight:800;
+
+">
+
+LoanBase System
+
+</span>
+
+
+
+<span id="mobileExtra">
+
+to continue your application review.
+
+</span>
+
+
+
+<span
+
+id="readToggle"
+
+onclick="toggleReadMore()"
+
+style="
+
+display:none;
+
+color:#4ade80;
+
+font-weight:800;
+
+cursor:pointer;
+
+">
+
+ Read More...
+
+</span>
+
+
+
+</div>
+
+
+
+<div style="
+
+margin-top:20px;
+
+
+
+padding:16px;
+
+
+
+background:#131f18;
+
+
+
+border-radius:18px;
+
+">
+
+
+
+<div style="
+
+display:flex;
+
+justify-content:space-between;
+
+">
+
+
+
+<span>Selected Loan</span>
+
+
+
+<b>
+
+
+
+${selectedLoan[0]}
+
+
+
+</b>
+
+
+
+</div>
+
+
+
+<hr style="
+
+margin:14px 0;
+
+border-color:rgba(255,255,255,.06);
+
+">
+
+
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+">
+
+<span>
+Requested Amount
+</span>
+
+<b>
+₦${selectedAmount.toLocaleString()}
+</b>
+
+</div>
+
+<hr style="
+margin:12px 0;
+border-color:rgba(255,255,255,.06);
+">
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+">
+
+<span>
+Interest
+</span>
+
+<b style="
+color:#4ade80;
+">
+
+${selectedLoan.currentInterest || selectedLoan[3]}%
+
+</b>
+
+</div>
+
+<hr style="
+margin:12px 0;
+border-color:rgba(255,255,255,.06);
+">
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+">
+
+<span>
+Submission Fee
+</span>
+
+<b style="
+color:#facc15;
+">
+
+₦${selectedLoan[4].toLocaleString()}
+
+</b>
+
+</div>
+
+</div>
+
+
+
+<div class="btn-row">
+
+
+
+<button
+
+type="button"
+
+class="cancel"
+
+onclick="showForm()">
+
+Back
+
+</button>
+
+
+
+<button
+
+type="button"
+
+class="primary"
+
+onclick="showFee()">
+
+
+
+Continue
+
+
+
+</button>
+
+
+
+</div>
+
+
+
+`;
+
+
+
+            }
+
+
+
+            function showContinueButton() {
+
+
+
+                screen.innerHTML = `
+
+
+
+<div class="summary"
+
+style="text-align:center;">
+
+
+
+This Request Will Cost You
+
+
+
+<br><br>
+
+
+
+<h2>
+
+
+
+NGN
+
+${selectedLoan[4].toLocaleString()}
+
+
+
+</h2>
+
+
+
+To Proceed
+
+
+
+</div>
+
+
+
+<button
+
+type="button"
+
+class="cancel"
+
+onclick="returnToForm(event)">
+
+
+
+Back
+
+
+
+</button>
+
+
+
+<button
+
+class="primary"
+
+onclick="showFee()">
+
+
+
+Continue
+
+
+
+</button>
+
+
+
+`;
+
+
+
+            }
+
+
+
+    function showFee() {
+
+
+
+            screen.innerHTML = `
+
+
+
+<div style="
+
+position:relative;
+
+overflow:hidden;
+
+
+
+padding:24px;
+
+
+
+border-radius:26px;
+
+
+
+background:
+
+linear-gradient(
+
+135deg,
+
+rgba(34,197,94,.18),
+
+rgba(10,18,14,.96)
+
+);
+
+
+
+border:1px solid rgba(34,197,94,.16);
+
+
+
+margin-bottom:18px;
+
+">
+
+
+
+<div style="
+
+position:absolute;
+
+top:-60px;
+
+right:-60px;
+
+
+
+width:180px;
+
+height:180px;
+
+
+
+border-radius:50%;
+
+
+
+background:
+
+radial-gradient(
+
+circle,
+
+rgba(74,222,128,.18),
+
+transparent 70%
+
+);
+
+"></div>
+
+
+
+<div style="
+
+display:flex;
+
+align-items:center;
+
+gap:16px;
+
+position:relative;
+
+z-index:2;
+
+">
+
+
+
+<div style="
+
+width:72px;
+
+height:72px;
+
+
+
+border-radius:18px;
+
+
+
+overflow:hidden;
+
+
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+
+
+background:transparent;
+
+
+
+border:none;
+
+
+
+box-shadow:none;
+
+">
+
+
+
+<img 
+
+src="PalmPayLogo.png"
+
+
+
+style="
+
+width:100%;
+
+height:100%;
+
+
+
+object-fit:cover;
+
+">
+
+
+
+</div>
+
+
+
+<div>
+
+
+
+<div style="
+
+font-size:32px;
+
+font-weight:900;
+
+color:white;
+
+">
+
+
+
+LoanBase™
+
+
+
+</div>
+
+
+
+<div style="
+
+margin-top:6px;
+
+
+
+color:rgba(255,255,255,.78);
+
+
+
+font-size:14px;
+
+
+
+line-height:1.7;
+
+">
+
+
+
+Secure payment details for application continuation.
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+<div style="
+
+display:block;
+
+
+
+width:100%;
+
+">
+
+
+
+<!-- LEFT SIDE -->
+
+
+
+<div style="
+
+background:
+
+linear-gradient(
+
+180deg,
+
+#111a14,
+
+#0c120f
+
+);
+
+
+
+padding:22px;
+
+
+
+border-radius:22px;
+
+
+
+border:
+
+1px solid rgba(255,255,255,.06);
+
+">
+
+
+
+<div style="
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:flex-start;
+
+gap:14px;
+
+">
+
+
+
+<div>
+
+
+
+<div style="
+
+font-size:13px;
+
+opacity:.7;
+
+">
+
+
+
+Submission Fee
+
+
+
+</div>
+
+
+
+<div style="
+
+font-size:52px;
+
+
+
+font-weight:900;
+
+
+
+color:#4ade80;
+
+
+
+margin-top:10px;
+
+">
+
+
+
+₦${selectedLoan[4].toLocaleString()}
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+<!-- PROFILE -->
+
+
+
+<div style="
+
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+
+flex-shrink:0;
+
+">
+
+
+
+<img
+
+src="LoanbaseManager.png"
+
+
+
+style="
+
+width:88px;
+
+height:88px;
+
+
+
+border-radius:50%;
+
+
+
+object-fit:cover;
+
+
+
+object-position:center top;
+
+
+
+border:3px solid rgba(34,197,94,.25);
+
+
+
+box-shadow:
+
+0 10px 24px rgba(0,0,0,.35);
+
+">
+
+
+
+<div style="
+
+margin-top:8px;
+
+
+
+font-size:10px;
+
+
+
+font-weight:600;
+
+
+
+color:#4ade80;
+
+
+
+text-align:center;
+
+
+
+white-space:nowrap;
+
+">
+
+
+
+Account Manager
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+<div style="opacity:.55;">
+
+Bank Name
+
+</div>
+
+
+
+<div style="
+
+font-size:20px;
+
+font-weight:800;
+
+margin-top:6px;
+
+">
+
+
+
+PalmPay
+
+
+
+</div>
+
+
+
+<hr style="
+
+margin:16px 0;
+
+border-color:rgba(255,255,255,.06);
+
+">
+
+
+
+<div style="opacity:.55;">
+
+Account Name
+
+</div>
+
+
+
+<div style="
+
+font-size:20px;
+
+font-weight:800;
+
+margin-top:6px;
+
+">
+
+
+
+Paul Chimuanya Onyibor
+
+
+
+</div>
+
+
+
+<hr style="
+
+margin:16px 0;
+
+border-color:rgba(255,255,255,.06);
+
+">
+
+
+
+<div style="opacity:.55;">
+
+Account Number
+
+</div>
+
+
+
+<div style="
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+gap:10px;
+
+margin-top:10px;
+
+width:100%;
+
+">
+
+
+
+<div
+
+id="accNumber"
+
+
+
+style="
+
+flex:1;
+
+
+
+font-size:28px;
+
+
+
+font-weight:900;
+
+
+
+letter-spacing:1px;
+
+
+
+color:#4ade80;
+
+
+
+overflow:hidden;
+
+
+
+text-overflow:ellipsis;
+
+
+
+white-space:nowrap;
+
+">
+
+
+
+7070653390
+
+
+
+</div>
+
+
+
+<button
+
+type="button"
+
+
+
+id="copyBtn"
+
+
+
+onclick="copyAccountNumber()"
+
+
+
+style="
+
+min-width:90px;
+
+
+
+padding:12px;
+
+
+
+border:none;
+
+
+
+border-radius:12px;
+
+
+
+background:#22c55e;
+
+
+
+color:white;
+
+
+
+font-weight:800;
+
+
+
+cursor:pointer;
+
+
+
+flex-shrink:0;
+
+">
+
+
+
+Copy
+
+
+
+</button>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+<div style="
+
+margin-top:20px;
+
+
+
+display:flex;
+
+align-items:center;
+
+
+
+gap:14px;
+
+
+
+padding:14px;
+
+
+
+background:
+
+linear-gradient(
+
+180deg,
+
+rgba(34,197,94,.08),
+
+rgba(255,255,255,.02)
+
+);
+
+
+
+border:1px solid rgba(255,255,255,.06);
+
+
+
+border-radius:18px;
+
+">
+
+
+
+<img
+
+src="LoanbaseManager.png"
+
+
+
+style="
+
+width:88px;
+
+height:88px;
+
+
+
+border-radius:50%;
+
+
+
+object-fit:cover;
+
+
+
+object-position:center top;
+
+
+
+border:3px solid rgba(34,197,94,.25);
+
+
+
+flex-shrink:0;
+
+">
+
+
+
+<div>
+
+
+
+<div style="
+
+font-size:16px;
+
+
+
+font-weight:900;
+
+
+
+color:white;
+
+">
+
+
+
+Paul Chimuanya Onyibor
+
+
+
+</div>
+
+
+
+<div style="
+
+margin-top:4px;
+
+
+
+font-size:13px;
+
+
+
+color:#4ade80;
+
+
+
+font-weight:700;
+
+">
+
+
+
+LoanBase Account Manager
+
+
+
+</div>
+
+
+
+<div style="
+
+margin-top:8px;
+
+
+
+font-size:12px;
+
+
+
+line-height:1.6;
+
+
+
+color:rgba(255,255,255,.68);
+
+">
+
+
+
+For payment support and application processing.
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+<div class="btn-row">
+
+
+
+<button
+
+type="button"
+
+class="cancel"
+
+onclick="showForm()">
+
+Back
+
+</button>
+
+
+
+<button
+
+class="primary"
+
+onclick="showReview()">
+
+
+
+Proceed
+
+
+
+</button>
+
+
+
+</div>
+
+
+
+`;
+
+        }
+
+
+
+    function showReview() {
+
+
+
+            screen.innerHTML = `
+
+
+
+<div style="
+
+position:relative;
+
+padding:22px;
+
+border-radius:24px;
+
+overflow:hidden;
+
+
+
+background:
+
+linear-gradient(
+
+135deg,
+
+rgba(34,197,94,.18),
+
+rgba(10,20,16,.95)
+
+);
+
+
+
+border:1px solid rgba(34,197,94,.18);
+
+
+
+box-shadow:
+
+0 18px 50px rgba(0,0,0,.35);
+
+
+
+margin-bottom:18px;
+
+">
+
+
+
+<div style="
+
+position:absolute;
+
+top:-60px;
+
+right:-60px;
+
+
+
+width:180px;
+
+height:180px;
+
+
+
+border-radius:50%;
+
+
+
+background:
+
+radial-gradient(
+
+circle,
+
+rgba(74,222,128,.18),
+
+transparent 70%
+
+);
+
+"></div>
+
+
+
+<div style="
+
+display:flex;
+
+align-items:center;
+
+gap:16px;
+
+position:relative;
+
+z-index:2;
+
+">
+
+
+
+<div style="
+
+width:72px;
+
+height:72px;
+
+
+
+border-radius:22px;
+
+
+
+overflow:hidden;
+
+
+
+border:1px solid rgba(34,197,94,.18);
+
+">
+
+
+
+<div style="
+
+width:72px;
+
+height:72px;
+
+
+
+border-radius:22px;
+
+
+
+overflow:hidden;
+
+
+
+flex-shrink:0;
+
+
+
+background:
+
+linear-gradient(
+
+145deg,
+
+#0d1712,
+
+#14261b
+
+);
+
+
+
+border:1px solid rgba(34,197,94,.18);
+
+
+
+box-shadow:
+
+0 10px 30px rgba(34,197,94,.14);
+
+">
+
+
+
+<img
+
+src="review1.png"
+
+
+
+style="
+
+width:100%;
+
+height:100%;
+
+
+
+display:block;
+
+
+
+object-fit:cover;
+
+
+
+object-position:center;
+
+
+
+transform:scale(1.12);
+
+
+
+filter:
+
+brightness(.98)
+
+contrast(1.1)
+
+saturate(1.05);
+
+">
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+<div>
+
+
+
+<div style="
+
+font-size:clamp(20px,4vw,32px);
+
+font-weight:900;
+
+color:white;
+
+
+
+white-space:nowrap;
+
+overflow:hidden;
+
+text-overflow:ellipsis;
+
+
+
+line-height:1.05;
+
+width:100%;
+
+">
+
+Review Application
+
+</div>
+
+
+
+<div style="
+
+margin-top:6px;
+
+
+
+font-size:clamp(11px,2.8vw,14px);
+
+
+
+color:rgba(255,255,255,.78);
+
+
+
+white-space:nowrap;
+
+overflow:hidden;
+
+text-overflow:ellipsis;
+
+
+
+width:100%;
+
+">
+
+Confirm your details before continuing.
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<!-- LOAN DETAILS -->
+
+
+
+<div style="
+
+background:#101814;
+
+
+
+padding:22px;
+
+
+
+border-radius:22px;
+
+
+
+margin-bottom:14px;
+
+
+
+border:1px solid rgba(255,255,255,.06);
+
+">
+
+
+
+<div style="
+
+font-size:18px;
+
+font-weight:900;
+
+
+
+margin-bottom:16px;
+
+
+
+color:#4ade80;
+
+">
+
+
+
+Loan Information
+
+
+
+</div>
+
+
+
+<div style="
+
+display:grid;
+
+
+
+grid-template-columns:1fr 1fr;
+
+
+
+gap:12px;
+
+">
+
+
+
+${card("Loan Type", selectedLoan[0])}
+
+${card(
+    "Amount",
+    "₦" + Number(selectedAmount || 0).toLocaleString()
+)}
+
+${card(
+    "Interest",
+    (selectedLoan.currentInterest || selectedLoan[3] || 0) + "%"
+)}
+
+${card(
+    "Repayment",
+    "₦" + Math.round(
+        Number(selectedAmount || 0) +
+        (
+            Number(selectedAmount || 0) *
+            (selectedLoan.currentInterest || selectedLoan[3] || 0) / 100
+        )
+    ).toLocaleString()
+)}
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<!-- APPLICANT -->
+
+
+
+<div style="
+
+background:#101814;
+
+
+
+padding:22px;
+
+
+
+border-radius:22px;
+
+
+
+border:1px solid rgba(255,255,255,.06);
+
+">
+
+
+
+<div style="
+
+font-size:18px;
+
+
+
+font-weight:900;
+
+
+
+margin-bottom:16px;
+
+
+
+color:#4ade80;
+
+">
+
+
+
+Applicant Details
+
+
+
+</div>
+
+
+
+<div style="
+
+display:grid;
+
+
+
+grid-template-columns:1fr 1fr;
+
+
+
+gap:12px;
+
+">
+
+
+
+${card("Full Name", formData.name)}
+
+${card("Phone Number", formData.phone)}
+
+${card("Next Of Kin", formData.nok)}
+
+${card("Bank Name", formData.bank)}
+
+${card("Account Name", formData.accName)}
+
+${card("Account Number", formData.accNum)}
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div class="btn-row">
+
+
+
+<button
+
+class="cancel"
+
+onclick="showForm()">
+
+
+
+Back & Edit
+
+
+
+</button>
+
+
+
+<button
+
+class="primary"
+
+onclick="showReceipt()">
+
+
+
+Confirm & Continue
+
+
+
+</button>
+
+
+
+</div>
+
+`;
+
+
+
+        }
+
+
+
+    function card(title, value) {
+
+
+
+            const id =
+
+                "value_" +
+
+                title.replace(/\s/g, '');
+
+
+
+            const shortValue =
+
+                String(value).length > 15
+
+                    ? String(value).slice(0, 12) + "..."
+
+                    : value;
+
+
+
+            return `
+
+
+
+<div style="
+
+padding:12px;
+
+
+
+background:
+
+linear-gradient(
+
+145deg,
+
+rgba(18,28,21,.98),
+
+rgba(10,15,12,.98)
+
+);
+
+
+
+border-radius:18px;
+
+
+
+border:1px solid rgba(255,255,255,.05);
+
+
+
+min-height:82px;
+
+
+
+display:flex;
+
+
+
+flex-direction:column;
+
+
+
+justify-content:center;
+
+">
+
+
+
+<div style="
+
+font-size:10px;
+
+
+
+font-weight:600;
+
+
+
+text-transform:uppercase;
+
+
+
+color:#7f9485;
+
+
+
+margin-bottom:10px;
+
+">
+
+
+
+${title}
+
+
+
+</div>
+
+
+
+<div
+
+id="${id}"
+
+
+
+data-full="${value}"
+
+
+
+onclick="toggleCardText('${id}')"
+
+
+
+style="
+
+font-size:13px;
+
+font-weight:700;
+
+color:white;
+
+
+
+white-space:nowrap;
+
+overflow:hidden;
+
+text-overflow:ellipsis;
+
+
+
+cursor:pointer;
+
+
+
+padding-bottom:10px;
+
+
+
+position:relative;
+
+">
+
+
+
+${shortValue}
+
+
+
+<div style="
+
+position:absolute;
+
+
+
+left:0;
+
+bottom:0;
+
+
+
+width:38px;
+
+height:3px;
+
+
+
+border-radius:999px;
+
+
+
+background:
+
+linear-gradient(
+
+90deg,
+
+#22c55e,
+
+rgba(34,197,94,.15)
+
+);
+
+
+
+box-shadow:
+
+0 0 10px rgba(34,197,94,.45);
+
+">
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+`;
+
+
+
+        }
+
+
+
+        function toggleCardText(id) {
+
+
+
+            const el =
+
+                document.getElementById(id);
+
+
+
+            if (!el) return;
+
+
+
+            const full =
+
+                el.dataset.full;
+
+
+
+            el.innerHTML =
+
+                full;
+
+
+
+            setTimeout(() => {
+
+
+
+                el.innerHTML =
+
+                    full.length > 15
+
+                        ? full.slice(0, 12) + "..."
+
+                        : full;
+
+
+
+            }, 12000);
+
+
+
+        }
+
+
+
+        function reviewRow(label, value) {
+
+
+
+            return `
+
+
+
+<div style="
+
+display:flex;
+
+
+
+justify-content:space-between;
+
+
+
+align-items:center;
+
+
+
+padding:14px 0;
+
+
+
+border-bottom:
+
+1px solid rgba(255,255,255,.05);
+
+">
+
+
+
+<div style="
+
+font-size:13px;
+
+
+
+opacity:.6;
+
+">
+
+
+
+${label}
+
+
+
+</div>
+
+
+
+<div style="
+
+font-size:15px;
+
+
+
+font-weight:800;
+
+
+
+text-align:right;
+
+
+
+max-width:55%;
+
+
+
+word-break:break-word;
+
+">
+
+
+
+${value}
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+`;
+
+
+
+        }
+
+
+
+
+
+        function mobileRow(label, value) {
+
+
+
+            return `
+
+
+
+<div style="
+
+display:flex;
+
+
+
+justify-content:space-between;
+
+
+
+align-items:center;
+
+
+
+padding:18px;
+
+
+
+border-top:1px solid rgba(255,255,255,.05);
+
+">
+
+
+
+<div style="
+
+font-size:14px;
+
+
+
+color:rgba(255,255,255,.62);
+
+">
+
+
+
+${label}
+
+
+
+</div>
+
+
+
+<div style="
+
+font-size:15px;
+
+
+
+font-weight:800;
+
+
+
+text-align:right;
+
+
+
+max-width:55%;
+
+
+
+word-break:break-word;
+
+
+
+color:white;
+
+">
+
+
+
+${value}
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+`;
+
+
+
+        }
+
+
+
+    function showReceipt() {
+
+
+
+        screen.innerHTML = `
+
+
+
+<div style="
+
+position:relative;
+
+
+
+padding:24px;
+
+
+
+border-radius:26px;
+
+
+
+overflow:hidden;
+
+
+
+background:
+
+linear-gradient(
+
+135deg,
+
+rgba(34,197,94,.18),
+
+rgba(8,15,11,.96)
+
+);
+
+
+
+border:1px solid rgba(34,197,94,.16);
+
+
+
+margin-bottom:18px;
+
+">
+
+
+
+<div style="
+
+position:absolute;
+
+
+
+right:-70px;
+
+top:-70px;
+
+
+
+width:180px;
+
+height:180px;
+
+
+
+border-radius:50%;
+
+
+
+background:
+
+radial-gradient(
+
+circle,
+
+rgba(74,222,128,.15),
+
+transparent 70%
+
+);
+
+"></div>
+
+
+
+<div style="
+
+display:flex;
+
+align-items:center;
+
+gap:16px;
+
+position:relative;
+
+z-index:2;
+
+">
+
+
+
+<img
+
+src="paymentTerminal.png"
+
+
+
+style="
+
+width:72px;
+
+height:72px;
+
+
+
+object-fit:cover;
+
+
+
+display:block;
+
+
+
+border-radius:18px;
+
+
+
+box-shadow:
+
+0 10px 24px rgba(34,197,94,.14);
+
+
+
+animation:
+
+posFloat 4.5s infinite ease-in-out;
+
+">
+
+
+
+<div>
+
+
+
+<div style="
+
+font-size:30px;
+
+font-weight:900;
+
+">
+
+
+
+Upload Receipt
+
+
+
+</div>
+
+
+
+<div style="
+
+margin-top:6px;
+
+
+
+font-size:14px;
+
+
+
+color:rgba(255,255,255,.75);
+
+line-height:1.7;
+
+">
+
+
+
+Upload your submission fee and continue processing your application.
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div style="
+
+background:
+
+linear-gradient(
+
+180deg,
+
+#101814,
+
+#0b100d
+
+);
+
+
+
+padding:22px;
+
+
+
+border-radius:22px;
+
+
+
+border:1px solid rgba(255,255,255,.06);
+
+">
+
+
+
+<label
+
+for="receipt"
+
+class="moving-border-upload"
+
+
+
+style="
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+
+
+min-height:320px;
+
+
+
+padding:0;
+
+
+
+overflow:hidden;
+
+">
+
+
+
+<!-- IMAGE ONLY -->
+
+<img
+
+id="receiptPreview"
+
+
+
+src=""
+
+
+
+style="
+
+display:none;
+
+
+
+width:100%;
+
+height:100%;
+
+
+
+min-height:320px;
+
+
+
+object-fit:contain;
+
+
+
+background:#0b120e;
+
+">
+
+
+
+<!-- TAP AREA -->
+
+<div
+
+id="uploadContent"
+
+
+
+style="
+
+display:flex;
+
+
+
+flex-direction:column;
+
+
+
+align-items:center;
+
+
+
+justify-content:center;
+
+
+
+width:100%;
+
+height:320px;
+
+">
+
+
+
+<img
+
+src="tap-upload-icon.png"
+
+
+
+style="
+
+width:80px;
+
+height:80px;
+
+margin-bottom:14px;
+
+">
+
+
+
+<div style="
+
+font-size:18px;
+
+font-weight:900;
+
+color:#4ade80;
+
+">
+
+Tap To Upload Receipt
+
+</div>
+
+
+
+</div>
+
+
+
+</label>
+
+
+
+<input
+
+id="receipt"
+
+type="file"
+
+accept=".jpg,.jpeg,.png,.webp"
+
+style="display:none"
+
+onchange="previewReceipt(event)">
+
+
+
+<div style="
+
+margin-top:18px;
+
+
+
+padding:18px;
+
+
+
+border-radius:18px;
+
+
+
+background:
+
+rgba(34,197,94,.05);
+
+
+
+border:
+
+1px solid rgba(34,197,94,.10);
+
+">
+
+
+
+<div style="
+
+font-size:13px;
+
+
+
+opacity:.7;
+
+">
+
+
+
+Application Status
+
+
+
+</div>
+
+
+
+<div style="
+
+margin-top:8px;
+
+
+
+display:flex;
+
+
+
+align-items:center;
+
+
+
+gap:10px;
+
+">
+
+
+
+<div style="
+
+width:10px;
+
+height:10px;
+
+
+
+border-radius:50%;
+
+
+
+background:#f59e0b;
+
+
+
+box-shadow:
+
+0 0 12px #f59e0b;
+
+">
+
+</div>
+
+
+
+<div
+
+id="receiptStatus"
+
+
+
+style="
+
+font-size:16px;
+
+
+
+font-weight:900;
+
+
+
+color:#fbbf24;
+
+">
+
+
+
+Waiting For Approval
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div> 
+
+
+
+</div>
+
+
+
+
+
+<div class="btn-row">
+
+
+
+<button
+
+class="cancel"
+
+onclick="showReview()">
+
+
+
+Back
+
+
+
+</button>
+
+
+
+<button
+
+class="primary"
+
+onclick="uploadReceipt()">
+
+
+
+Upload Receipt
+
+
+
+</button>
+
+
+
+</div>
+
+
+
+`;
+
+
+
+    }
+
+
+
+            const firebaseConfig = {
+
+
+
+                apiKey: "AIzaSyDpZxduOiWNanY82r1fFJ-kosZTKZosx4E",
+
+
+
+                authDomain: "register-12a60.firebaseapp.com",
+
+
+
+                projectId: "register-12a60",
+
+
+
+                storageBucket: "register-12a60.appspot.com",
+
+
+
+                messagingSenderId: "172443565306",
+
+
+
+                appId: "1:172443565306:web:354a4d3de29d4dbf521d43"
+
+
+
+            };
+
+            const app = initializeApp(firebaseConfig);
+
+                    const db =
+                        initializeFirestore(
+                            app,
+                            {
+
+                                experimentalForceLongPolling: true,
+
+                                useFetchStreams: false
+
+                            }
+
+                        );
+
+
+
+               // expose globally
+
+                window.app = app;
+
+                window.db = db;
+
+
+
+          window.uploadReceipt = async () => {
+
+                try {
+
+                    document.getElementById(
+                        "receiptStatus"
+                    ).innerHTML =
+                        "Submitting...";
+
+                    const save =
+                        await addDoc(
+
+                            collection(
+                                db,
+                                "requests"
+                            ),
+
+                            {
+
+                                status: "pending",
+
+                                requestNumber:
+                                    Date.now(),
+
+                                name:
+                                    formData?.name || "",
+
+                                loanType:
+                                    formData?.loanType || "",
+
+                                created:
+                                    Date.now()
+
+                            }
+
+                        );
+
+                    showReceiptPending(
+                        save.id
+                    );
+
+                }
+
+                catch (err) {
+
+                    console.log(err);
+
+                    alert(
+                        err.message
+                    );
+
+                }
+
+            };
+
+               function showReceiptPending(requestId) {
+
+                    screen.innerHTML = `
+
+<div style="
+position:relative;
+overflow:hidden;
+
+padding:28px;
+
+border-radius:28px;
+
+background:
+linear-gradient(
+145deg,
+#09130d,
+#111b14,
+#0c1510
+);
+
+border:1px solid rgba(34,197,94,.10);
+
+box-shadow:
+0 30px 80px rgba(0,0,0,.45);
+
+">
+
+<div style="
+position:absolute;
+
+top:-100px;
+right:-100px;
+
+width:240px;
+height:240px;
+
+border-radius:50%;
+
+background:
+radial-gradient(
+circle,
+rgba(34,197,94,.12),
+transparent 70%
+);
+
+"></div>
+
+<div style="
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+
+text-align:center;
+
+position:relative;
+
+z-index:2;
+">
+
+<div style="
+width:120px;
+height:120px;
+
+border-radius:50%;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:56px;
+
+background:
+linear-gradient(
+145deg,
+rgba(34,197,94,.10),
+rgba(255,255,255,.02)
+);
+
+border:
+2px solid rgba(34,197,94,.18);
+
+margin-bottom:18px;
+
+animation:pulse 2s infinite;
+">
+
+✓
+
+</div>
+
+<div style="
+font-size:34px;
+
+font-weight:900;
+
+color:white;
+">
+
+Uploaded Successfully
+
+</div>
+
+<div style="
+margin-top:10px;
+
+max-width:620px;
+
+font-size:14px;
+
+line-height:1.9;
+
+color:rgba(255,255,255,.72);
+">
+
+Your application has been submitted successfully and is now under review by LoanBase Team.
+
+Please wait while your result is being processed.
+
+</div>
+
+<div id="liveStatus"
+
+style="
+margin-top:26px;
+
+padding:18px;
+
+width:100%;
+
+border-radius:20px;
+
+background:
+linear-gradient(
+180deg,
+rgba(250,204,21,.08),
+rgba(255,255,255,.02)
+);
+
+border:
+1px solid rgba(250,204,21,.16);
+
+font-size:20px;
+
+font-weight:900;
+
+color:#facc15;
+">
+
+⏳ Waiting For Result...
+
+</div>
+
+<div style="
+margin-top:26px;
+
+display:flex;
+
+gap:14px;
+
+width:100%;
+">
+
+<button
+
+onclick="goHome()"
+
+style="
+flex:1;
+
+height:58px;
+
+border:none;
+
+border-radius:18px;
+
+background:#232b26;
+
+color:white;
+
+font-weight:900;
+
+cursor:pointer;
+">
+
+Exit Application
+
+</button>
+
+<button
+
+onclick="showReceipt()"
+
+style="
+flex:1;
+
+height:58px;
+
+border:none;
+
+border-radius:18px;
+
+background:
+linear-gradient(
+145deg,
+#22c55e,
+#16a34a
+);
+
+color:white;
+
+font-weight:900;
+
+cursor:pointer;
+">
+
+Go Back To Upload Receipt
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<style>
+
+@keyframes pulse{
+
+0%{
+transform:scale(1);
+}
+
+50%{
+transform:scale(1.06);
+}
+
+100%{
+transform:scale(1);
+}
+
+}
+
+</style>
+
+`;
+
+                    onSnapshot(
+
+                        doc(
+                            db,
+                            "requests",
+                            requestId
+                        ),
+
+                        (snap) => {
+
+                            if (!snap.exists())
+                                return;
+
+                            const data =
+                                snap.data();
+
+                            const box =
+                                document.getElementById(
+                                    "liveStatus"
+                                );
+
+                            if (!box)
+                                return;
+
+                            if (
+                                data.status ===
+                                "approved"
+                            ) {
+
+                                box.style.background =
+                                    "#052e16";
+
+                                box.style.color =
+                                    "#22c55e";
+
+                                box.innerHTML =
+                                    "🎉 Approved ✅";
+
+                                setTimeout(
+                                    () => {
+                                        showVerification();
+                                    },
+                                    1200
+                                );
+
+                            }
+
+                            else if (
+                                data.status ===
+                                "rejected"
+                            ) {
+
+                                box.style.background =
+                                    "#450a0a";
+
+                                box.style.color =
+                                    "#ef4444";
+
+                                box.innerHTML =
+                                    "⚠ Upload Your Submission Fee To Review And Continue Your Application";
+
+                            }
+
+                            else {
+
+                                box.style.background =
+                                    "#292514";
+
+                                box.style.color =
+                                    "#facc15";
+
+                                box.innerHTML =
+                                    "⏳ Waiting For Result...";
+
+                            }
+
+                        }
+
+                    );
+
+                }
+
+
+
+    function showVerification() {
+
+
+
+            screen.innerHTML = `
+
+
+
+<div style="
+
+position:relative;
+
+
+
+padding:24px;
+
+
+
+border-radius:26px;
+
+
+
+overflow:hidden;
+
+
+
+background:
+
+linear-gradient(
+
+135deg,
+
+rgba(34,197,94,.18),
+
+rgba(8,15,11,.96)
+
+);
+
+
+
+border:
+
+1px solid rgba(34,197,94,.16);
+
+
+
+margin-bottom:18px;
+
+">
+
+
+
+<div style="
+
+position:absolute;
+
+
+
+right:-60px;
+
+top:-60px;
+
+
+
+width:180px;
+
+height:180px;
+
+
+
+border-radius:50%;
+
+
+
+background:
+
+radial-gradient(
+
+circle,
+
+rgba(74,222,128,.16),
+
+transparent 70%
+
+);
+
+"></div>
+
+
+
+<div style="
+
+display:flex;
+
+align-items:center;
+
+gap:16px;
+
+position:relative;
+
+z-index:2;
+
+">
+
+
+
+<div style="
+
+width:72px;
+
+height:72px;
+
+
+
+border-radius:20px;
+
+
+
+display:flex;
+
+
+
+justify-content:center;
+
+
+
+align-items:center;
+
+
+
+background:
+
+linear-gradient(
+
+145deg,
+
+#122117,
+
+#0c120e
+
+);
+
+
+
+font-size:34px;
+
+">
+
+
+
+🔐
+
+
+
+</div>
+
+
+
+<div>
+
+
+
+<div style="
+
+font-size:30px;
+
+
+
+font-weight:900;
+
+">
+
+
+
+Verification
+
+
+
+</div>
+
+
+
+<div style="
+
+margin-top:6px;
+
+
+
+font-size:14px;
+
+
+
+color:rgba(255,255,255,.75);
+
+
+
+line-height:1.8;
+
+">
+
+
+
+Verify your identity to continue processing your application.
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div style="
+
+background:#101814;
+
+
+
+padding:22px;
+
+
+
+border-radius:22px;
+
+
+
+border:
+
+1px solid rgba(255,255,255,.06);
+
+">
+
+
+
+<div style="
+
+margin-bottom:10px;
+
+
+
+font-size:14px;
+
+
+
+color:#4ade80;
+
+
+
+font-weight:800;
+
+">
+
+
+
+Bank Verification Number (BVN)
+
+
+
+</div>
+
+
+
+<input
+
+
+
+id="bvn"
+
+
+
+maxlength="11"
+
+
+
+inputmode="numeric"
+
+
+
+placeholder="Your BVN"
+
+
+
+style="
+
+margin-bottom:18px;
+
+">
+
+
+
+
+
+<div style="
+
+margin-bottom:10px;
+
+
+
+font-size:14px;
+
+
+
+color:#4ade80;
+
+
+
+font-weight:800;
+
+">
+
+
+
+National Identification Number (NIN)
+
+
+
+</div>
+
+
+
+<input
+
+
+
+id="nin"
+
+
+
+maxlength="11"
+
+
+
+inputmode="numeric"
+
+
+
+placeholder="Your NIN"
+
+>
+
+<div style="
+
+margin-top:18px;
+
+
+
+padding:14px;
+
+
+
+border-radius:16px;
+
+
+
+background:
+
+rgba(34,197,94,.05);
+
+
+
+border:
+
+1px solid rgba(34,197,94,.10);
+
+
+
+font-size:13px;
+
+
+
+line-height:1.8;
+
+
+
+color:rgba(255,255,255,.72);
+
+">
+
+
+
+🔒 Your verification details are encrypted and used for application review.
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div
+
+id="verifyWarning"
+
+
+
+style="
+
+display:none;
+
+
+
+margin-top:14px;
+
+
+
+padding:12px;
+
+
+
+border-radius:14px;
+
+
+
+background:
+
+rgba(239,68,68,.10);
+
+
+
+border:
+
+1px solid rgba(239,68,68,.20);
+
+
+
+color:#ff8d8d;
+
+
+
+font-size:13px;
+
+
+
+font-weight:700;
+
+
+
+text-align:center;
+
+">
+
+</div>
+
+
+
+
+
+<div class="btn-row">
+
+
+
+<button
+
+class="cancel"
+
+
+
+onclick="showReceipt()">
+
+
+
+Back
+
+
+
+</button>
+
+
+
+<button
+
+class="primary"
+
+
+
+onclick="validateVerification()">
+
+
+
+Continue
+
+
+
+</button>
+
+
+
+</div>
+
+
+
+`;
+
+
+
+        }
+
+        function validateVerification() {
+
+
+
+            const bvn =
+
+                document
+
+                    .getElementById(
+
+                        "bvn"
+
+                    )
+
+                    .value
+
+                    .trim();
+
+
+
+            const nin =
+
+                document
+
+                    .getElementById(
+
+                        "nin"
+
+                    )
+
+                    .value
+
+                    .trim();
+
+            const warn =
+
+                document
+
+                    .getElementById(
+
+                        "verifyWarning"
+
+                    );
+
+
+
+            warn.style.display =
+
+                "none";
+
+
+
+            if (
+
+                bvn.length !== 11
+
+            ) {
+
+
+
+                warn.style.display =
+
+                    "block";
+
+
+
+                warn.innerHTML =
+
+                    "Enter Valid 11 Digit BVN";
+
+
+
+                return;
+
+
+
+            }
+
+
+
+            if (
+
+                nin.length !== 11
+
+            ) {
+
+
+
+                warn.style.display =
+
+                    "block";
+
+
+
+                warn.innerHTML =
+
+                    "Enter Valid 11 Digit NIN";
+
+
+
+                return;
+
+
+
+            }
+
+
+
+            finishRequest();
+
+
+
+        }
+
+
+
+    function finishRequest() {
+
+
+
+            screen.innerHTML = `
+
+
+
+<div style="
+
+position:relative;
+
+overflow:hidden;
+
+
+
+padding:28px;
+
+
+
+border-radius:28px;
+
+
+
+background:
+
+linear-gradient(
+
+145deg,
+
+#0b140e,
+
+#101b14,
+
+#0d1712
+
+);
+
+
+
+border:1px solid rgba(34,197,94,.12);
+
+
+
+box-shadow:
+
+0 25px 70px rgba(0,0,0,.45);
+
+">
+
+
+
+<!-- glow -->
+
+<div style="
+
+position:absolute;
+
+top:-120px;
+
+right:-120px;
+
+
+
+width:260px;
+
+height:260px;
+
+
+
+border-radius:50%;
+
+
+
+background:
+
+radial-gradient(
+
+circle,
+
+rgba(34,197,94,.12),
+
+transparent 70%
+
+);
+
+"></div>
+
+
+
+<!-- HEADER -->
+
+<div style="
+
+display:flex;
+
+align-items:center;
+
+gap:18px;
+
+
+
+position:relative;
+
+z-index:2;
+
+">
+
+
+
+<div style="
+
+width:78px;
+
+height:78px;
+
+
+
+border-radius:24px;
+
+
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+
+
+background:
+
+linear-gradient(
+
+145deg,
+
+rgba(34,197,94,.08),
+
+rgba(255,255,255,.02)
+
+);
+
+
+
+border:1px solid rgba(34,197,94,.16);
+
+">
+
+
+
+⏳
+
+
+
+</div>
+
+
+
+<div>
+
+
+
+<div style="
+
+font-size:32px;
+
+
+
+font-weight:900;
+
+
+
+color:white;
+
+">
+
+
+
+Pending Review
+
+
+
+</div>
+
+
+
+<div style="
+
+margin-top:6px;
+
+
+
+font-size:14px;
+
+
+
+line-height:1.8;
+
+
+
+color:rgba(255,255,255,.74);
+
+">
+
+
+
+Your request has been received and is currently under review.
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<!-- STATUS -->
+
+<div style="
+
+margin-top:22px;
+
+
+
+padding:18px;
+
+
+
+border-radius:22px;
+
+
+
+background:
+
+linear-gradient(
+
+180deg,
+
+rgba(34,197,94,.06),
+
+rgba(255,255,255,.02)
+
+);
+
+
+
+border:1px solid rgba(34,197,94,.08);
+
+">
+
+
+
+<div style="
+
+display:flex;
+
+align-items:center;
+
+
+
+gap:14px;
+
+">
+
+
+
+<div style="
+
+width:14px;
+
+height:14px;
+
+
+
+border-radius:50%;
+
+
+
+background:#facc15;
+
+
+
+box-shadow:
+
+0 0 10px #facc15,
+
+0 0 20px #facc15,
+
+0 0 40px rgba(250,204,21,.9);
+
+
+
+animation:pulseGlow 1.4s infinite;
+
+"></div>
+
+
+
+<div>
+
+
+
+<div style="
+
+font-size:18px;
+
+
+
+font-weight:900;
+
+
+
+color:#facc15;
+
+">
+
+
+
+Review In Progress
+
+
+
+</div>
+
+
+
+<div style="
+
+margin-top:4px;
+
+
+
+font-size:13px;
+
+
+
+color:rgba(255,255,255,.65);
+
+">
+
+
+
+LoanBase Team is checking your application.
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<!-- CONTACT -->
+
+<div style="
+
+margin-top:20px;
+
+
+
+padding:22px;
+
+
+
+border-radius:24px;
+
+
+
+background:
+
+linear-gradient(
+
+145deg,
+
+#111a14,
+
+#0d1410
+
+);
+
+
+
+border:1px solid rgba(255,255,255,.06);
+
+">
+
+
+
+<div style="
+
+font-size:22px;
+
+
+
+font-weight:900;
+
+
+
+margin-bottom:18px;
+
+
+
+color:#4ade80;
+
+">
+
+
+
+Need Help? Contact Us
+
+
+
+</div>
+
+
+
+
+
+<a
+
+href="https://t.me/+13054826714"
+
+
+
+target="_blank"
+
+
+
+style="
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+
+
+padding:18px;
+
+
+
+margin-bottom:14px;
+
+
+
+text-decoration:none;
+
+
+
+border-radius:18px;
+
+
+
+background:
+
+linear-gradient(
+
+145deg,
+
+rgba(0,136,204,.15),
+
+rgba(0,136,204,.04)
+
+);
+
+
+
+color:white;
+
+">
+
+
+
+<div>
+
+
+
+<div style="font-weight:900;">
+
+📩 Telegram (USA)
+
+</div>
+
+
+
+<div style="opacity:.7;">
+
++1 305 482 6714
+
+</div>
+
+
+
+</div>
+
+
+
+<div style="font-size:20px;">
+
+→
+
+</div>
+
+
+
+</a>
+
+
+
+
+
+<a
+
+href="https://t.me/+2347070653390"
+
+
+
+target="_blank"
+
+
+
+style="
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+
+
+padding:18px;
+
+
+
+margin-bottom:14px;
+
+
+
+text-decoration:none;
+
+
+
+border-radius:18px;
+
+
+
+background:
+
+linear-gradient(
+
+145deg,
+
+rgba(34,197,94,.14),
+
+rgba(34,197,94,.03)
+
+);
+
+
+
+color:white;
+
+">
+
+
+
+<div>
+
+
+
+<div style="font-weight:900;">
+
+📩 Telegram (Nigeria)
+
+</div>
+
+
+
+<div style="opacity:.7;">
+
++234 707 065 3390
+
+</div>
+
+
+
+</div>
+
+
+
+<div style="font-size:20px;">
+
+→
+
+</div>
+
+
+
+</a>
+
+
+
+
+
+<a
+
+href="mailto:Kanekelly611@gmail.com"
+
+
+
+style="
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+
+
+padding:18px;
+
+
+
+text-decoration:none;
+
+
+
+border-radius:18px;
+
+
+
+background:
+
+linear-gradient(
+
+145deg,
+
+rgba(239,68,68,.15),
+
+rgba(239,68,68,.03)
+
+);
+
+
+
+color:white;
+
+">
+
+
+
+<div>
+
+
+
+<div style="font-weight:900;">
+
+✉ Email Support
+
+</div>
+
+
+
+<div style="opacity:.7;">
+
+Kanekelly611@gmail.com
+
+</div>
+
+
+
+</div>
+
+
+
+<div style="font-size:20px;">
+
+→
+
+</div>
+
+
+
+</a>
+
+
+
+</div>
+
+
+
+
+
+<button
+
+class="primary"
+
+
+
+onclick="goToGroup()"
+
+
+
+style="
+
+margin-top:24px;
+
+
+
+width:100%;
+
+
+
+height:58px;
+
+
+
+font-size:18px;
+
+
+
+font-weight:900;
+
+
+
+border-radius:18px;
+
+
+
+background:
+
+linear-gradient(
+
+145deg,
+
+#22c55e,
+
+#16a34a
+
+);
+
+
+
+box-shadow:
+
+0 10px 28px rgba(34,197,94,.35);
+
+
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+gap:10px;
+
+">
+
+
+
+🎉 Join To Take Loan Now!
+
+
+
+</button>
+
+
+
+</div>
+
+
+
+<style>
+
+
+
+@keyframes pulseGlow{
+
+
+
+0%{
+
+transform:scale(1);
+
+}
+
+
+
+50%{
+
+transform:scale(1.25);
+
+}
+
+
+
+100%{
+
+transform:scale(1);
+
+}
+
+
+
+}
+
+
+
+</style>
+
+
+
+`;
+
+
+
+        }
+
+
+
+    window.addEventListener("DOMContentLoaded", () => {
+
+            try {
+
+                render();
+
+            } catch (e) {
+
+                console.log("Render Error:", e);
+
+
+
+                document.getElementById("grid").innerHTML =
+
+                    `
+
+<div style="
+
+padding:30px;
+
+text-align:center;
+
+color:red;
+
+">
+
+Loan Cards Failed To Load
+
+</div>
+
+`;
+
+            }
+
+        });
+
+
+
+    function goHome() {
+
+
+
+        modal.style.display = "none";
+
+
+
+        screen.innerHTML = "";
+
+
+
+        window.scrollTo({
+
+            top: 0,
+
+            behavior: "smooth"
+
+        });
+
+
+
+    }
+
+
+
+
+
+    function toggleReadMore() {
+
+
+
+        const extra =
+
+            document.getElementById("mobileExtra");
+
+
+
+        const btn =
+
+            document.getElementById("readToggle");
+
+
+
+        if (extra.classList.contains("open")) {
+
+
+
+            extra.classList.remove("open");
+
+
+
+            btn.innerHTML =
+
+                " Continue Read More...";
+
+
+
+        } else {
+
+
+
+            extra.classList.add("open");
+
+
+
+            btn.innerHTML =
+
+                " Show Less";
+
+
+
+        }
+
+
+
+    }
+
+
+
+    function copyAccountNumber() {
+
+
+
+        const number =
+
+            document
+
+                .getElementById(
+
+                    "accNumber"
+
+                )
+
+                .innerText;
+
+
+
+        const btn =
+
+            document
+
+                .getElementById(
+
+                    "copyBtn"
+
+                );
+
+
+
+        navigator.clipboard.writeText(number);
+
+
+
+        btn.innerHTML =
+
+            "Copied ✓";
+
+
+
+        btn.style.background =
+
+            "#15803d";
+
+
+
+        setTimeout(() => {
+
+
+
+            btn.innerHTML =
+
+                "Copy";
+
+
+
+            btn.style.background =
+
+                "#22c55e";
+
+
+
+        }, 2000);
+
+
+
+}
+
+
+
+    function previewReceipt(event) {
+
+
+
+        const file =
+
+            event.target.files[0];
+
+
+
+        if (!file) return;
+
+
+
+        const preview =
+
+            document.getElementById(
+
+                'receiptPreview'
+
+            );
+
+
+
+        const upload =
+
+            document.getElementById(
+
+                'uploadContent'
+
+            );
+
+
+
+        const reader =
+
+            new FileReader();
+
+
+
+        reader.onload = function (e) {
+
+
+
+            preview.src =
+
+                e.target.result;
+
+
+
+            
+
+            preview.style.display =
+
+                'block';
+
+
+
+    
+
+            upload.style.display =
+
+                'none';
+
+
+
+        };
+
+
+
+        reader.readAsDataURL(file);
+
+
+
+    }
+
+
+
+    function goToGroup() {
+
+
+
+        window.location.href =
+
+            "https://chat.whatsapp.com/GxhuTVVHhA4KABCYraAXZY";
+
+
+
+    }
+
+
+
+    /* GLOBAL BUTTON FUNCTIONS */
+
+
+
+    window.closeModal = closeModal;
+
+
+
+    window.validateAndContinue =
+
+        validateAndContinue;
+
+
+
+    window.showDashboard =
+
+        showDashboard;
+
+
+
+    window.showForm =
+
+        showForm;
+
+
+
+    window.submitForm =
+
+        submitForm;
+
+
+
+    window.showProceedNotice =
+
+        showProceedNotice;
+
+
+
+    window.returnToForm =
+
+        returnToForm;
+
+
+
+    window.showContinueButton =
+
+        showContinueButton;
+
+
+
+    window.showFee =
+
+        showFee;
+
+
+
+    window.showReview =
+
+        showReview;
+
+
+
+    window.showReceipt =
+
+        showReceipt;
+
+
+
+    window.uploadReceipt =
+
+        uploadReceipt;
+
+
+
+    window.showVerification =
+
+        showVerification;
+
+
+
+    window.validateVerification =
+
+        validateVerification;
+
+
+
+    window.finishRequest =
+
+        finishRequest;
+
+
+
+    window.goHome =
+
+        goHome;
+
+
+
+    window.toggleReadMore =
+
+        toggleReadMore;
+
+
+
+    window.copyAccountNumber =
+
+        copyAccountNumber;
+
+
+
+    window.previewReceipt =
+
+        previewReceipt;
+
+    window.goToGroup =
+
+        goToGroup;
+
+    window.openForm =
+
+        openForm;
+
+</script>
+
+</body>
+
+</html>
